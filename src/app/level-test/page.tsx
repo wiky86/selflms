@@ -1,0 +1,50 @@
+import { levelTests } from "@/data/levelTests";
+import { TestCard } from "@/components/cards/TestCard";
+import { PageTitle, SectionTitle } from "@/components/common/Titles";
+
+export default function LevelTestPage() {
+  const activeTests = levelTests.filter(t => t.status === "진행 중");
+  const upcomingTests = levelTests.filter(t => t.status === "예정");
+  const pastTests = levelTests.filter(t => t.status === "종료");
+
+  return (
+    <div className="space-y-10">
+      <PageTitle>Level Test</PageTitle>
+      
+      <section>
+        <SectionTitle>응시 가능한 테스트</SectionTitle>
+        {activeTests.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {activeTests.map((test) => (
+              <TestCard key={test.id} test={test} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-secondary-500 bg-secondary-50 p-4 rounded-lg text-sm">현재 응시 가능한 테스트가 없습니다.</p>
+        )}
+      </section>
+
+      <section>
+        <SectionTitle>예정된 테스트</SectionTitle>
+        {upcomingTests.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {upcomingTests.map((test) => (
+              <TestCard key={test.id} test={test} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-secondary-500 bg-secondary-50 p-4 rounded-lg text-sm">예정된 테스트가 없습니다.</p>
+        )}
+      </section>
+
+      <section>
+        <SectionTitle>종료된 테스트</SectionTitle>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {pastTests.map((test) => (
+            <TestCard key={test.id} test={test} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
