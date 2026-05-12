@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
-  basePath: "/selflms",
+  basePath: process.env.GITHUB_ACTIONS ? "/selflms" : "",
   images: {
     unoptimized: true,
   },
