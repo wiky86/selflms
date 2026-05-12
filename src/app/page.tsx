@@ -1,5 +1,7 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { courseInfo } from "@/data/course";
-import { notices } from "@/data/notices";
 import { levelTests } from "@/data/levelTests";
 import { NoticeCard } from "@/components/cards/NoticeCard";
 import { QuickLinkCard } from "@/components/cards/QuickLinkCard";
@@ -7,9 +9,22 @@ import { SectionTitle } from "@/components/common/Titles";
 import { FileText, CheckSquare, Users, Briefcase, BookOpen, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { CTAButton } from "@/components/common/CTAButton";
+import { getNotices } from "@/lib/db/notices";
+import { Notice } from "@/types";
 
 export default function Home() {
-  const importantNotices = notices.filter(n => n.isImportant).slice(0, 3);
+  const [importantNotices, setImportantNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getNotices();
+      setImportantNotices(data.filter(n => n.isImportant).slice(0, 3));
+      setLoading(false);
+    }
+    load();
+  }, []);
+
   const upcomingTest = levelTests.find(t => t.status === "예정" || t.status === "진행 중");
 
   return (

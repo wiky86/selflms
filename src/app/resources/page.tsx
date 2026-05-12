@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { resources } from "@/data/resources";
+import { useState, useEffect } from "react";
 import { ResourceCard } from "@/components/cards/ResourceCard";
 import { PageTitle } from "@/components/common/Titles";
 import { FilterTabs } from "@/components/common/FilterTabs";
 import { EmptyState } from "@/components/common/EmptyState";
+import { getResources } from "@/lib/db/resources";
+import { Resource } from "@/types";
 
 const WEEKS = ["전체", "1주차", "2주차", "3주차", "4주차"];
 const TYPES = ["전체", "강의자료", "실습", "복습", "참고", "심화", "취업"];
@@ -13,6 +14,17 @@ const TYPES = ["전체", "강의자료", "실습", "복습", "참고", "심화",
 export default function ResourcesPage() {
   const [activeWeek, setActiveWeek] = useState("전체");
   const [activeType, setActiveType] = useState("전체");
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getResources();
+      setResources(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   const filteredResources = resources.filter(
     (resource) => 
@@ -35,7 +47,9 @@ export default function ResourcesPage() {
         </div>
       </div>
 
-      {filteredResources.length > 0 ? (
+      {loading ? (
+        <div className="py-20 text-center text-secondary-500 font-medium">데이터를 불러오는 중입니다...</div>
+      ) : filteredResources.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredResources.map((resource) => (
             <ResourceCard key={resource.id} resource={resource} />

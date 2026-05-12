@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { notices } from "@/data/notices";
+import { useState, useEffect } from "react";
 import { NoticeCard } from "@/components/cards/NoticeCard";
 import { PageTitle } from "@/components/common/Titles";
 import { FilterTabs } from "@/components/common/FilterTabs";
 import { EmptyState } from "@/components/common/EmptyState";
+import { getNotices } from "@/lib/db/notices";
+import { Notice } from "@/types";
 
 const CATEGORIES = ["전체", "중요", "수업", "과제", "테스트", "취업", "행사"];
 
 export default function NoticesPage() {
   const [activeCategory, setActiveCategory] = useState("전체");
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getNotices();
+      setNotices(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   const filteredNotices = notices.filter(
     (notice) => activeCategory === "전체" || 
@@ -28,7 +40,9 @@ export default function NoticesPage() {
         onChange={setActiveCategory} 
       />
 
-      {filteredNotices.length > 0 ? (
+      {loading ? (
+        <div className="py-20 text-center text-secondary-500 font-medium">데이터를 불러오는 중입니다...</div>
+      ) : filteredNotices.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredNotices.map((notice) => (
             <NoticeCard key={notice.id} notice={notice} />
