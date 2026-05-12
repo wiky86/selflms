@@ -6,7 +6,7 @@ import { PageTitle } from "@/components/common/Titles";
 import { FilterTabs } from "@/components/common/FilterTabs";
 import { EmptyState } from "@/components/common/EmptyState";
 import { getResources } from "@/lib/db/resources";
-import { Resource } from "@/types";
+import { LearningResource } from "@/types";
 
 const WEEKS = ["전체", "1주차", "2주차", "3주차", "4주차"];
 const TYPES = ["전체", "강의자료", "실습", "복습", "참고", "심화", "취업"];
@@ -14,7 +14,7 @@ const TYPES = ["전체", "강의자료", "실습", "복습", "참고", "심화",
 export default function ResourcesPage() {
   const [activeWeek, setActiveWeek] = useState("전체");
   const [activeType, setActiveType] = useState("전체");
-  const [resources, setResources] = useState<Resource[]>([]);
+  const [resources, setResources] = useState<LearningResource[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

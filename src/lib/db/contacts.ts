@@ -1,21 +1,21 @@
 import { db } from "../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
-import { Contact } from "@/types";
+import { ContactInfo } from "@/types";
 
 const COLLECTION_NAME = "contacts";
 
-export async function getContacts(): Promise<Contact[]> {
+export async function getContacts(): Promise<ContactInfo[]> {
   try {
     const q = query(collection(db, COLLECTION_NAME), orderBy("category", "asc"));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Contact));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ContactInfo));
   } catch (error) {
     console.error("Error fetching contacts:", error);
     return [];
   }
 }
 
-export async function addContact(item: Omit<Contact, "id">): Promise<string> {
+export async function addContact(item: Omit<ContactInfo, "id">): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTION_NAME), item);
   return docRef.id;
 }

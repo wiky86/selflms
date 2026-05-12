@@ -1,26 +1,26 @@
 import { db } from "../firebase";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
-import { Resource } from "@/types";
+import { LearningResource } from "@/types";
 
 const COLLECTION_NAME = "resources";
 
-export async function getResources(): Promise<Resource[]> {
+export async function getResources(): Promise<LearningResource[]> {
   try {
-    const q = query(collection(db, COLLECTION_NAME), orderBy("title", "asc"));
+    const q = query(collection(db, COLLECTION_NAME), orderBy("week", "asc"));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Resource));
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LearningResource));
   } catch (error) {
     console.error("Error fetching resources:", error);
     return [];
   }
 }
 
-export async function addResource(resource: Omit<Resource, "id">): Promise<string> {
-  const docRef = await addDoc(collection(db, COLLECTION_NAME), resource);
+export async function addResource(item: Omit<LearningResource, "id">): Promise<string> {
+  const docRef = await addDoc(collection(db, COLLECTION_NAME), item);
   return docRef.id;
 }
 
-export async function updateResource(id: string, resource: Partial<Resource>): Promise<void> {
+export async function updateResource(id: string, resource: Partial<LearningResource>): Promise<void> {
   const docRef = doc(db, COLLECTION_NAME, id);
   await updateDoc(docRef, resource);
 }

@@ -27,9 +27,6 @@ export default function JobsPage() {
   const filteredJobs = jobs.filter(
     (job) => activeType === "전체" || job.type === activeType
   );
-    (job) => activeType === "전체" || job.type === activeType
-  );
-
   return (
     <div className="space-y-6">
       <PageTitle>취업 정보</PageTitle>

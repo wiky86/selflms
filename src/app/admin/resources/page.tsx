@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { PageTitle, SectionTitle } from "@/components/common/Titles";
 import { CTAButton } from "@/components/common/CTAButton";
 import { getResources, addResource, deleteResource } from "@/lib/db/resources";
-import { Resource } from "@/types";
+import { LearningResource } from "@/types";
 import { Trash2, PlusCircle } from "lucide-react";
 
 export default function AdminResourcesPage() {
-  const [resources, setResources] = useState<Resource[]>([]);
+  const [resources, setResources] = useState<LearningResource[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   
@@ -171,7 +171,7 @@ export default function AdminResourcesPage() {
                     </span>
                   </td>
                   <td className="p-4 font-medium text-secondary-900">{resource.title}</td>
-                  <td className="p-4 text-secondary-500">{resource.date}</td>
+                  <td className="p-4 text-secondary-500">{resource.week}</td>
                   <td className="p-4 text-right">
                     <button 
                       onClick={() => resource.id && handleDelete(resource.id)}
