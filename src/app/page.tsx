@@ -10,22 +10,26 @@ import { FileText, CheckSquare, Users, Briefcase, BookOpen, AlertCircle } from "
 import Link from "next/link";
 import { CTAButton } from "@/components/common/CTAButton";
 import { getNotices } from "@/lib/db/notices";
-import { Notice } from "@/types";
+import { getLevelTests } from "@/lib/db/levelTests";
+import { Notice, LevelTest } from "@/types";
 
 export default function Home() {
   const [importantNotices, setImportantNotices] = useState<Notice[]>([]);
+  const [upcomingTest, setUpcomingTest] = useState<LevelTest | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      const data = await getNotices();
-      setImportantNotices(data.filter(n => n.isImportant).slice(0, 3));
+      const [noticesData, testsData] = await Promise.all([
+        getNotices(),
+        getLevelTests()
+      ]);
+      setImportantNotices(noticesData.filter(n => n.isImportant).slice(0, 3));
+      setUpcomingTest(testsData.find(t => t.status === "예정" || t.status === "진행 중") || null);
       setLoading(false);
     }
     load();
   }, []);
-
-  const upcomingTest = levelTests.find(t => t.status === "예정" || t.status === "진행 중");
 
   return (
     <div className="space-y-8 pb-10">

@@ -1,10 +1,30 @@
-import { studies } from "@/data/studies";
+"use client";
+
+import { useState, useEffect } from "react";
+import { getStudies } from "@/lib/db/studies";
+import { StudyGroup } from "@/types";
 import { StudyCard } from "@/components/cards/StudyCard";
 import { PageTitle, SectionTitle } from "@/components/common/Titles";
 import { CTAButton } from "@/components/common/CTAButton";
 import { PlusCircle, UploadCloud, Info } from "lucide-react";
 
 export default function StudyPage() {
+  const [studies, setStudies] = useState<StudyGroup[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getStudies();
+      setStudies(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  if (loading) {
+    return <div className="space-y-8"><PageTitle>그룹 스터디</PageTitle><div className="py-20 text-center text-secondary-500">데이터를 불러오는 중입니다...</div></div>;
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

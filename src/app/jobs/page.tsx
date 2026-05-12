@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { jobs } from "@/data/jobs";
+import { useState, useEffect } from "react";
+import { getJobs } from "@/lib/db/jobs";
+import { JobInfo } from "@/types";
 import { JobCard } from "@/components/cards/JobCard";
 import { PageTitle } from "@/components/common/Titles";
 import { FilterTabs } from "@/components/common/FilterTabs";
@@ -11,8 +12,21 @@ const JOB_TYPES = ["전체", "채용", "인턴십", "특강", "설명회", "공�
 
 export default function JobsPage() {
   const [activeType, setActiveType] = useState("전체");
+  const [jobs, setJobs] = useState<JobInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getJobs();
+      setJobs(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   const filteredJobs = jobs.filter(
+    (job) => activeType === "전체" || job.type === activeType
+  );
     (job) => activeType === "전체" || job.type === activeType
   );
 

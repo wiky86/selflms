@@ -68,3 +68,13 @@ export type ContactInfo = {
   availableTime: string;
   note: string;
 };
+
+export type PortfolioLink = {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  url: string;
+  isExternal: boolean;
+};
+

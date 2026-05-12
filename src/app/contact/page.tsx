@@ -1,8 +1,28 @@
-import { contacts } from "@/data/contacts";
+"use client";
+
+import { useState, useEffect } from "react";
+import { getContacts } from "@/lib/db/contacts";
+import { ContactInfo } from "@/types";
 import { PageTitle } from "@/components/common/Titles";
 import { PhoneCall, User, Clock, Info } from "lucide-react";
 
 export default function ContactPage() {
+  const [contacts, setContacts] = useState<ContactInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getContacts();
+      setContacts(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  if (loading) {
+    return <div className="space-y-6"><PageTitle>문의 안내</PageTitle><div className="py-20 text-center text-secondary-500">데이터를 불러오는 중입니다...</div></div>;
+  }
+
   return (
     <div className="space-y-6 pb-10">
       <PageTitle>문의 안내</PageTitle>

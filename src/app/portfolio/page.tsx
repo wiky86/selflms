@@ -1,8 +1,35 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { PageTitle, SectionTitle } from "@/components/common/Titles";
 import { QuickLinkCard } from "@/components/cards/QuickLinkCard";
 import { CheckCircle2, FileText, LayoutTemplate, GitBranch, Link as LinkIcon } from "lucide-react";
+import { getPortfolioLinks } from "@/lib/db/portfolio";
+import { PortfolioLink } from "@/types";
 
 export default function PortfolioPage() {
+  const [links, setLinks] = useState<PortfolioLink[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getPortfolioLinks();
+      setLinks(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const getIconComponent = (iconName: string) => {
+    switch (iconName) {
+      case "LayoutTemplate": return <LayoutTemplate />;
+      case "FileText": return <FileText />;
+      case "GitBranch": return <GitBranch />;
+      case "LinkIcon": return <LinkIcon />;
+      default: return <LinkIcon />;
+    }
+  };
+
   return (
     <div className="space-y-10 pb-10">
       <PageTitle>포트폴리오 가이드</PageTitle>
@@ -76,28 +103,24 @@ export default function PortfolioPage() {
 
           <section>
             <SectionTitle>4. 템플릿 링크</SectionTitle>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <QuickLinkCard 
-                href="https://notion.so/example-portfolio" external
-                title="Notion 포트폴리오" description="가장 기본이 되는 통합 이력서 템플릿"
-                icon={<LayoutTemplate />}
-              />
-              <QuickLinkCard 
-                href="https://docs.google.com/presentation" external
-                title="프로젝트 정리 양식" description="발표용 PPT 템플릿"
-                icon={<FileText />}
-              />
-              <QuickLinkCard 
-                href="https://github.com/example-readme" external
-                title="GitHub README" description="깔끔한 리포지토리 메인 설명 양식"
-                icon={<GitBranch />}
-              />
-              <QuickLinkCard 
-                href="#" 
-                title="이력서 템플릿" description="원티드/사람인 지원용 워드 양식"
-                icon={<LinkIcon />}
-              />
-            </div>
+            {loading ? (
+              <div className="text-center text-secondary-500 py-10">데이터를 불러오는 중입니다...</div>
+            ) : links.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {links.map((link) => (
+                  <QuickLinkCard 
+                    key={link.id}
+                    href={link.url} 
+                    external={link.isExternal}
+                    title={link.title} 
+                    description={link.description}
+                    icon={getIconComponent(link.icon)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-secondary-500 bg-secondary-50 p-4 rounded-lg text-sm">등록된 템플릿 링크가 없습니다.</div>
+            )}
           </section>
         </div>
       </div>

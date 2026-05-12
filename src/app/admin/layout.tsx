@@ -23,14 +23,20 @@ export default function AdminLayout({
             <Link href="/admin/resources" className="flex items-center gap-3 px-3 py-2 text-secondary-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
               <UploadCloud className="w-5 h-5" /> 학습 자료 관리
             </Link>
-            <Link href="#" className="flex items-center gap-3 px-3 py-2 text-secondary-400 rounded-lg cursor-not-allowed">
+            <Link href="/admin/level-tests" className="flex items-center gap-3 px-3 py-2 text-secondary-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
               <CheckSquare className="w-5 h-5" /> 레벨 테스트 관리
             </Link>
-            <Link href="#" className="flex items-center gap-3 px-3 py-2 text-secondary-400 rounded-lg cursor-not-allowed">
+            <Link href="/admin/studies" className="flex items-center gap-3 px-3 py-2 text-secondary-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
               <Users className="w-5 h-5" /> 스터디 관리
             </Link>
-            <Link href="#" className="flex items-center gap-3 px-3 py-2 text-secondary-400 rounded-lg cursor-not-allowed">
+            <Link href="/admin/jobs" className="flex items-center gap-3 px-3 py-2 text-secondary-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
               <Briefcase className="w-5 h-5" /> 취업 정보 관리
+            </Link>
+            <Link href="/admin/portfolio" className="flex items-center gap-3 px-3 py-2 text-secondary-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
+              <FileText className="w-5 h-5" /> 포트폴리오 가이드 관리
+            </Link>
+            <Link href="/admin/contacts" className="flex items-center gap-3 px-3 py-2 text-secondary-700 rounded-lg hover:bg-primary-50 hover:text-primary-600 transition-colors">
+              <Users className="w-5 h-5" /> 문의 안내 관리
             </Link>
           </nav>
         </div>
